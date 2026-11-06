@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>FRI dashboard</title>
+<style>
+:root{--bg:#f7f6fb;--card:#fff;--tx:#1f1d2b;--mu:#6e6c7e;--ln:#e6e4ef;--pu:#6e64d6;--pk:#cc4a78;--te:#178a68;--gr:#5b9a1e;--wn:#a32d2d;--wbg:#fcebeb;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#16151d;--card:#211f2b;--tx:#f1eff8;--mu:#a5a3b5;--ln:#363445;--pu:#9a92f0;--pk:#e57ba0;--te:#3fc29a;--gr:#8cc25a;--wn:#f09595;--wbg:#501313;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#16151d;--card:#211f2b;--tx:#f1eff8;--mu:#a5a3b5;--ln:#363445;--pu:#9a92f0;--pk:#e57ba0;--te:#3fc29a;--gr:#8cc25a;--wn:#f09595;--wbg:#501313;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font:20px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+[hidden]{display:none!important}
+.wrap{max-width:1040px;margin:0 auto;padding:0 16px 48px}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:11;background:var(--bg);border-bottom:1px solid var(--ln);padding:12px 0;margin-bottom:24px}
+.bar{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.brand{font-size:27px;font-weight:500;letter-spacing:.06em;margin-right:auto;color:var(--pu)}
+nav{display:flex;gap:6px;flex-wrap:wrap}
+nav a{color:var(--mu);text-decoration:none;padding:6px 12px;border-radius:8px;font-size:19px}
+nav a.on{background:color-mix(in srgb,var(--pu) 16%,transparent);color:var(--pu);font-weight:500}
+h2{font-size:23px;font-weight:500;margin:28px 0 12px}
+h3{font-size:20px;font-weight:500;margin:0 0 4px}
+.mu{color:var(--mu);font-size:18px}
+.hero{background:#4b3fb0;color:#fff;border-radius:16px;padding:32px 28px;position:relative;overflow:hidden}
+.hero h1{font-size:49px;font-weight:500;margin:0;letter-spacing:.08em}
+.hero p{margin:4px 0 0;opacity:.85}
+.hero{margin-bottom:24px}
+.hero .htag{color:#fff;background:none;padding:0;font-size:clamp(25px,4.2vw,35px);font-weight:500;margin-top:14px;opacity:1;line-height:1.3}
+.hero .htag:empty{display:none}
+.hero::after{content:"";position:absolute;right:-30px;top:-30px;width:140px;height:140px;border-radius:50%;background:#cc4a78;opacity:.55}
+.hero::before{content:"";position:absolute;right:70px;bottom:-40px;width:90px;height:90px;border-radius:50%;background:#178a68;opacity:.7}
+.card{background:var(--card);border:1px solid var(--ln);border-top:4px solid var(--c,var(--pu));border-radius:12px;padding:16px 20px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px}
+.big{font-size:33px;font-weight:500;color:var(--c)}
+.row{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;padding:9px 0;border-top:1px solid var(--ln)}
+.t{font-size:16px;font-weight:500;color:var(--tc);background:color-mix(in srgb,var(--tc) 16%,transparent);padding:2px 8px;border-radius:6px;min-width:58px;text-align:center}
+.nm{overflow-wrap:anywhere}
+.btn{font-size:18px;padding:4px 12px;border-radius:8px;border:1px solid var(--pu);color:var(--pu);text-decoration:none;white-space:nowrap;background:transparent}
+.btn.off{border-style:dashed;border-color:var(--ln);color:var(--mu)}
+.btn.fill{background:var(--pu);color:#fff;cursor:pointer;font:inherit;font-size:18px;border:0;padding:6px 14px}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}
+.empty{color:var(--mu);border:1px dashed var(--ln);border-radius:12px;padding:20px;text-align:center}
+.tag{font-size:17px;padding:2px 8px;border-radius:6px;background:color-mix(in srgb,var(--te) 16%,transparent);color:var(--te)}
+.tag.late{background:var(--wbg);color:var(--wn)}
+details.vc{background:var(--card);border:1px solid var(--ln);border-left:6px solid var(--c);border-radius:12px;margin-bottom:12px}
+details.vc summary{cursor:pointer;list-style:none;padding:14px 18px;display:flex;align-items:center;gap:12px}
+details.vc summary::-webkit-details-marker{display:none}
+details.vc summary::before{content:"\25B8";color:var(--c);transition:transform .15s}
+details.vc[open] summary::before{transform:rotate(90deg)}
+.vn{font-size:23px;font-weight:500;color:var(--c)}
+.vb{padding:0 18px 12px}
+.gl{font-size:17px;font-weight:500;color:var(--c);text-transform:none;margin:12px 0 2px;letter-spacing:.04em}
+.task{position:relative;display:grid;grid-template-columns:auto 1fr auto auto;gap:10px;align-items:center;padding:10px 6px;border-top:1px solid var(--ln);border-radius:8px;outline:none}
+.task:hover,.task:focus{background:color-mix(in srgb,var(--pu) 10%,transparent)}
+.tip{display:none;position:absolute;left:36px;top:calc(100% - 6px);background:var(--tx);color:var(--bg);padding:6px 12px;border-radius:8px;font-size:18px;z-index:5;white-space:nowrap}
+.task:hover .tip,.task:focus .tip{display:block}
+.dn{text-decoration:line-through;color:var(--mu)}
+.add{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;align-items:center}
+.add input{font:inherit;font-size:19px;padding:6px 10px;border:1px solid var(--ln);border-radius:8px;background:var(--bg);color:var(--tx);min-width:0;flex:1 1 130px}
+.err{color:var(--wn);flex-basis:100%}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{padding:4px 14px;border-radius:999px;font-size:19px;color:var(--c);background:color-mix(in srgb,var(--c) 16%,transparent)}
+.mh{display:flex;gap:16px;align-items:center;margin-bottom:10px}
+.ph{width:96px;height:96px;border-radius:50%;object-fit:cover;flex:none}
+.ini{display:flex;align-items:center;justify-content:center;background:color-mix(in srgb,var(--c) 18%,transparent);color:var(--c);font-weight:500;font-size:34px}
+.card a{color:var(--pu)}
+</style></head>
+<body><div class="wrap">
+<header><div class="bar"><div class="brand" id="brand">FRI</div>
+<nav><a href="#about">Mission</a><a href="#versions">FRI Evolution</a><a href="#team">Team</a><a href="#internal">Internal use</a></nav></div></header>
+<div id="err" class="empty" hidden style="color:var(--wn);margin-bottom:16px"></div>
+<script>window.addEventListener("error",function(ev){var b=document.getElementById("err");if(!b)return;b.hidden=false;b.textContent+=(b.textContent?" | ":"")+"Error: "+ev.message+" ("+String(ev.filename||"").split("/").pop()+", line "+ev.lineno+")"});</script>
+
+<div class="hero"><h1 id="heroName">FRI</h1><p id="heroFull">FinTech Readiness Index</p><p class="htag" id="heroTag"></p></div>
+
+<section data-view="internal" hidden>
+<h2 style="margin-top:0">At a glance</h2><div class="grid" id="glance"></div>
+<h2>Pending tasks</h2><div class="mu" style="margin:-6px 0 14px">Hover over a task to see who is doing it.</div>
+<div class="card" style="--c:var(--pk)" id="tl"></div>
+<h2>Done</h2><div class="card" style="--c:var(--gr)" id="dl"></div>
+</section>
+
+<section data-view="about" hidden>
+<h2 style="margin-top:0">What is FRI</h2><div class="card" id="what"></div>
+<h2>What do we provide</h2><div class="grid" id="measure"></div>
+<h2>Who we work with</h2><div class="chips" id="partners"></div>
+</section>
+
+<section data-view="versions" hidden>
+<h2 style="margin-top:0">FRI versions</h2><div class="mu" style="margin:-6px 0 14px">Click a version to see everything that belongs to it.</div><div id="vers"></div>
+</section>
+
+<section data-view="team" hidden>
+<h2 style="margin-top:0">Team details</h2><div id="team"></div>
+</section>
+</div>
+
+<script src="data/site.js"></script>
+<script src="data/about.js"></script>
+<script src="data/versions.js"></script>
+<script src="data/tasks.js"></script>
+<script src="data/team.js"></script>
+<script>
+(function(){
+const COL = { purple: "--pu", pink: "--pk", teal: "--te", green: "--gr", gray: "--mu" };
+const T = { p: "PPT", f: "PDF", x: "XLSX", s: "Sheet", d: "Doc", o: "Folder" };
+const TC = { p: "--pk", f: "--pu", x: "--gr", s: "--gr", d: "--te", o: "--mu" };
+const GR = { p: "Decks", f: "PDFs", x: "Data", s: "Data", d: "Docs", o: "Folders" };
+const f = (n, t, note, url) => ({ n, t, note, url });
+const mk = (arr, t) => (arr || []).map(a => f(a[0], t === "data" ? (/\.xlsx?$/i.test(a[0]) ? "x" : "s") : t, a[1] || "", a[2] || ""));
+const bad=[];
+const run=(label,fn)=>{try{fn()}catch(err){bad.push(label+": "+err.message);console.error(label,err)}};
+const pick=(get,file,fb)=>{try{const v=get();if(v===undefined)throw 0;return v}catch(_){bad.push(file+" has an error or is missing");return fb}};
+const D_SITE=pick(()=>SITE,"data/site.js",{name:"FRI",full:""});
+const D_ABOUT=pick(()=>ABOUT,"data/about.js",{what:"",measure:[],partners:[]});
+const D_VERSIONS=pick(()=>VERSIONS,"data/versions.js",[]);
+const D_CURRENT=(()=>{try{return CURRENT}catch(_){return {paperLabel:"",paper:"",pdf:""}}})();
+const D_TASKS=pick(()=>TASKS_START,"data/tasks.js",[]);
+const D_TEAM=pick(()=>TEAM,"data/team.js",[]);
+
+const views=["about","versions","team","internal"];
+function route(){
+  let h=(location.hash||"#about").slice(1);if(h==="overview"||h==="tasks")h="internal";const v=views.includes(h)?h:"about";
+  document.querySelectorAll("[data-view]").forEach(s=>s.hidden=s.dataset.view!==v);
+  document.querySelectorAll("nav a").forEach(a=>a.classList.toggle("on",a.getAttribute("href")==="#"+v));
+}
+addEventListener("hashchange",route);route();
+
+let ALLF=[],CUR_PAPER=f(D_CURRENT.paper,"p","",""),CUR_PDF=f(D_CURRENT.pdf,"f","","");
+run("data/versions.js",()=>{
+  D_VERSIONS.forEach(v=>{v.files=[...mk(v.decks,"p"),...mk(v.pdfs,"f"),...mk(v.data,"data"),...mk(v.docs,"d"),...mk(v.folders,"o")];v.c=COL[v.color]||"--pu"});
+  ALLF=D_VERSIONS.flatMap(v=>v.files);
+  CUR_PAPER=ALLF.find(x=>x.n===D_CURRENT.paper)||CUR_PAPER;
+  CUR_PDF=ALLF.find(x=>x.n===D_CURRENT.pdf)||CUR_PDF;
+});
+let WHAT="",MEASURE=[],PARTNERS=[];
+run("data/about.js",()=>{WHAT=D_ABOUT.what;MEASURE=D_ABOUT.measure.map(m=>[m[0],m[1],COL[m[2]]||"--pu"]);PARTNERS=D_ABOUT.partners.map(p=>[p[0],COL[p[1]]||"--pu"])});
+document.title=D_SITE.name+" dashboard";
+
+const e=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const $=id=>document.getElementById(id);
+const act=x=>x.url?`<a class="btn" href="${e(x.url)}" target="_blank" rel="noopener">Open</a>`:`<span class="btn off">Paste link</span>`;
+const row=x=>`<div class="row"><span class="t" style="--tc:var(${TC[x.t]})">${T[x.t]}</span><div><div class="nm">${e(x.n)}</div>${x.note?`<div class="mu">${e(x.note)}</div>`:""}</div>${act(x)}</div>`;
+
+run("About us page",()=>{
+$("what").textContent=WHAT;
+$("measure").innerHTML=MEASURE.map(m=>`<div class="card" style="--c:var(${m[2]})"><h3>${m[0]}</h3><div class="mu">${m[1]}</div></div>`).join("");
+$("partners").innerHTML=PARTNERS.map(p=>`<span class="chip" style="--c:var(${p[1]})">${p[0]}</span>`).join("");
+});
+
+run("FRI versions",()=>{
+$("vers").innerHTML=D_VERSIONS.map(v=>{
+  const g={};v.files.forEach(x=>(g[GR[x.t]]=g[GR[x.t]]||[]).push(x));
+  const body=["Decks","PDFs","Data","Docs","Folders"].filter(k=>g[k]).map(k=>`<div class="gl">${k.toUpperCase()}</div>${g[k].map(row).join("")}`).join("");
+  return `<details class="vc" style="--c:var(${v.c})" ${v.open?"open":""}><summary><span class="vn">${e(v.name)}</span><span class="mu">${e(v.when)}</span></summary><div class="vb">${body}</div></details>`;
+}).join("");
+});
+
+let tasks=null;
+try{const s=localStorage.getItem("fri-tasks");if(s)tasks=JSON.parse(s)}catch(_){}
+if(!tasks)tasks=D_TASKS.map((x,i)=>({id:"s"+i,t:x.t,owner:x.owner||"",due:x.due||"",done:!!x.done}));
+const save=()=>{try{localStorage.setItem("fri-tasks",JSON.stringify(tasks))}catch(_){}};
+const today=new Date();today.setHours(0,0,0,0);
+const late=t=>t.due&&!t.done&&new Date(t.due+"T00:00:00")<today;
+const fmt=d=>d.split("-").reverse().join("-");
+const trow=t=>`<div class="task" tabindex="0"><input type="checkbox" data-id="${t.id}" ${t.done?"checked":""} aria-label="Mark done"><span class="nm${t.done?" dn":""}">${e(t.t)}</span>${t.due?`<span class="mu">${fmt(t.due)}</span>`:"<span></span>"}${late(t)?'<span class="tag late">Overdue</span>':"<span></span>"}<div class="tip">${t.owner?`<b>${e(t.owner)}</b> :people responsible`:"Nobody assigned yet"}</div></div>`;
+const form=()=>`<div class="add"><input class="in-t" placeholder="New task" aria-label="Task name"><input class="in-o" placeholder="Who’s doing it" aria-label="Owner"><input class="in-d" type="text" inputmode="numeric" placeholder="dd-mm-yyyy" maxlength="10" aria-label="Due date (dd-mm-yyyy)"><button class="btn fill go" type="button">Add task</button><div class="err"></div></div>`;
+
+function render(){
+  const pend=tasks.filter(t=>!t.done).sort((a,b)=>(a.due||"9").localeCompare(b.due||"9"));
+  const done=tasks.filter(t=>t.done);
+  const next=pend[0];
+  $("glance").innerHTML=
+   `<div class="card" style="--c:var(--pu)"><div class="mu">Current paper version</div><div class="big">${e(D_CURRENT.paperLabel)}</div><div class="nm">${e(CUR_PAPER.n)}</div><div style="margin-top:10px">${act(CUR_PAPER)}</div></div>`+
+   `<div class="card" style="--c:var(--pk)"><div class="mu">Current PDF</div><div class="big">PDF</div><div class="nm">${e(CUR_PDF.n)}</div><div style="margin-top:10px">${act(CUR_PDF)}</div></div>`+
+   `<div class="card" style="--c:var(--gr);grid-column:1/-1"><div class="mu">Next task</div>${next?trow(next):'<div class="mu" style="padding:8px 0">No pending tasks.</div>'}${pend.length>1?`<div class="mu">+${pend.length-1} more in Pending tasks below</div>`:""}</div>`;
+  $("tl").innerHTML=(pend.length?pend.map(trow).join(""):'<div class="mu" style="padding:8px 0">Nothing pending.</div>')+form()+'<div class="mu" style="margin-top:8px">Tasks are saved in this browser only.</div>';
+  $("dl").innerHTML=done.length?done.map(trow).join(""):'<div class="mu">Nothing done yet.</div>';
+}
+run("Deadlines and tasks",render);
+
+document.addEventListener("click",ev=>{
+  const b=ev.target.closest(".go");if(!b)return;
+  const box=b.closest(".add"),err=box.querySelector(".err"),t=box.querySelector(".in-t").value.trim();
+  if(!t){err.textContent="Enter a task name first";return}
+  const raw=box.querySelector(".in-d").value.trim();
+  let due="";
+  if(raw){
+    const m=raw.match(/^(\d{1,2})[-\/.](\d{1,2})[-\/.](\d{4})$/);
+    const d=m&&new Date(+m[3],m[2]-1,+m[1]);
+    if(!d||d.getMonth()!==m[2]-1){err.textContent="Use the date format dd-mm-yyyy";return}
+    due=m[3]+"-"+m[2].padStart(2,"0")+"-"+m[1].padStart(2,"0");
+  }
+  tasks.push({id:Date.now(),t,owner:box.querySelector(".in-o").value.trim(),due,done:false});
+  save();render();
+});
+document.addEventListener("input",ev=>{const b=ev.target.closest(".add");if(b)b.querySelector(".err").textContent=""});
+document.addEventListener("keydown",ev=>{if(ev.key==="Enter"&&ev.target.closest(".add"))ev.target.closest(".add").querySelector(".go").click()});
+document.addEventListener("change",ev=>{
+  const c=ev.target.closest("input[data-id]");if(!c)return;
+  const t=tasks.find(x=>String(x.id)===c.dataset.id);if(t){t.done=c.checked;save();render()}
+});
+
+run("Banner",()=>{$("heroName").textContent=D_SITE.name;$("heroFull").textContent=D_SITE.full||"";$("heroTag").textContent=D_SITE.tagline||""});
+run("Team page",()=>{
+$("brand").textContent=D_SITE.name;$("heroName").textContent=D_SITE.name;$("heroFull").textContent=D_SITE.full;
+const initials=n=>n.split(/\s+/).map(w=>w[0]).slice(0,2).join("").toUpperCase();
+const mrow=(k,v)=>v?`<div class="mu"><b>${k}</b> ${v}</div>`:"";
+$("team").innerHTML=D_TEAM.length?`<div class="grid">${[...D_TEAM].sort((a,b)=>String(a.name).localeCompare(String(b.name))).map((m,i)=>{
+  const c=COL[m.color]||COL[["purple","pink","teal","green"][i%4]];
+  const pl=[].concat(m.photo||[]).filter(Boolean);
+  const av=pl.length?`<img class="ph" src="${e(pl[0])}" alt="" data-ini="${e(initials(m.name))}" data-q="${e(JSON.stringify(pl))}">`:`<div class="ph ini">${e(initials(m.name))}</div>`;
+  const reg=m.registered===true?"Yes":m.registered===false?"No":"";
+  return `<div class="card" style="--c:var(${c})"><div class="mh">${av}<div><h3>${e(m.name)}</h3><div class="mu">${e(m.role||"")}</div></div></div>${mrow("Joined",e(m.joined||""))}${mrow("Graduating",e(m.grad||""))}${m.email?`<div class="mu"><b>Email</b> <a href="mailto:${e(m.email)}">${e(m.email)}</a></div>`:""}${mrow("Registered this sem",reg)}${(m.ideas||[]).length?'<div class="gl">IDEAS</div>'+m.ideas.map(x=>`<div class="row" style="grid-template-columns:1fr"><span class="nm">${e(x)}</span></div>`).join(""):""}</div>`}).join("")}</div>`:'<div class="empty">Team details and ideas will be added here.</div>';
+  document.querySelectorAll("#team img.ph").forEach(img=>{
+    let list=[];try{list=JSON.parse(img.dataset.q)}catch(_){list=[img.getAttribute("src")]}
+    const exts=["jpg","jpeg","png","webp","JPG","JPEG","PNG"],queue=[];
+    list.forEach(c=>{[c,...exts.map(x=>c.replace(/\.[A-Za-z0-9]+$/,"")+"."+x)].forEach(v=>{if(!queue.includes(v))queue.push(v)})});
+    let k=1;
+    const swap=()=>{const d=document.createElement("div");d.className="ph ini";d.textContent=img.dataset.ini;d.title="Photo not found. Tried: "+list.join(" , ");img.replaceWith(d)};
+    const fail=()=>{if(k<queue.length)img.src=queue[k++];else swap()};
+    img.addEventListener("error",fail);
+    if(img.complete&&img.naturalWidth===0)fail();
+  });
+});
+
+if(bad.length){const b=$("err");b.hidden=false;b.textContent+=(b.textContent?" | ":"")+"Problem found: "+bad.join(" | ")}
+})();
+</script></body></html>
