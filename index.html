@@ -173,8 +173,7 @@ function render(){
   const next=pend[0];
   $("glance").innerHTML=
    `<div class="card" style="--c:var(--pu)"><div class="mu">Current paper version</div><div class="big">${e(D_CURRENT.paperLabel)}</div><div class="nm">${e(CUR_PAPER.n)}</div><div style="margin-top:10px">${act(CUR_PAPER)}</div></div>`+
-   `<div class="card" style="--c:var(--pk)"><div class="mu">Current PDF</div><div class="big">PDF</div><div class="nm">${e(CUR_PDF.n)}</div><div style="margin-top:10px">${act(CUR_PDF)}</div></div>`+
-   `<div class="card" style="--c:var(--gr);grid-column:1/-1"><div class="mu">Upcoming task</div>${next?trow(next):'<div class="mu" style="padding:8px 0">No pending tasks.</div>'}${pend.length>1?`<div class="mu">+${pend.length-1} more in Pending tasks below</div>`:""}</div>`;
+   `<div class="card" style="--c:var(--pk)"><div class="mu">Current PDF</div><div class="big">PDF</div><div class="nm">${e(CUR_PDF.n)}</div><div style="margin-top:10px">${act(CUR_PDF)}</div></div>`;
   $("tl").innerHTML=(pend.length?pend.map(trow).join(""):'<div class="mu" style="padding:8px 0">Nothing pending.</div>')+form()+'<div class="mu" style="margin-top:8px">Tasks are saved in this browser only.</div>';
   $("dl").innerHTML=done.length?done.map(trow).join(""):'<div class="mu">Nothing done yet.</div>';
 }
@@ -207,12 +206,18 @@ run("Team page",()=>{
 $("brand").textContent=D_SITE.name;$("heroName").textContent=D_SITE.name;$("heroFull").textContent=D_SITE.full;
 const initials=n=>n.split(/\s+/).map(w=>w[0]).slice(0,2).join("").toUpperCase();
 const mrow=(k,v)=>v?`<div class="mu"><b>${k}</b> ${v}</div>`:"";
-$("team").innerHTML=D_TEAM.length?`<div class="grid">${[...D_TEAM].sort((a,b)=>String(a.name).localeCompare(String(b.name))).map((m,i)=>{
+const card=(m,i)=>{
   const c=COL[m.color]||COL[["purple","pink","teal","green"][i%4]];
   const pl=[].concat(m.photo||[]).filter(Boolean);
   const av=pl.length?`<img class="ph" src="${e(pl[0])}" alt="" data-ini="${e(initials(m.name))}" data-q="${e(JSON.stringify(pl))}">`:`<div class="ph ini">${e(initials(m.name))}</div>`;
   const reg=m.registered===true?"Yes":m.registered===false?"No":"";
-  return `<div class="card" style="--c:var(${c})"><div class="mh">${av}<div><h3>${e(m.name)}</h3><div class="mu">${e(m.role||"")}</div></div></div>${mrow("Joined",e(m.joined||""))}${mrow("Graduating",e(m.grad||""))}${m.email?`<div class="mu"><b>Email</b> <a href="mailto:${e(m.email)}">${e(m.email)}</a></div>`:""}${mrow("Registered this sem",reg)}${(m.ideas||[]).length?'<div class="gl">IDEAS</div>'+m.ideas.map(x=>`<div class="row" style="grid-template-columns:1fr"><span class="nm">${e(x)}</span></div>`).join(""):""}</div>`}).join("")}</div>`:'<div class="empty">Team details and ideas will be added here.</div>';
+  return `<div class="card" style="--c:var(${c})"><div class="mh">${av}<div><h3>${e(m.name)}</h3><div class="mu">${e(m.role||"")}</div></div></div>${mrow("Joined",e(m.joined||""))}${mrow("Graduating",e(m.grad||""))}${m.email?`<div class="mu"><b>Email</b> <a href="mailto:${e(m.email)}">${e(m.email)}</a></div>`:""}${mrow("Registered this sem",reg)}${(m.ideas||[]).length?'<div class="gl">IDEAS</div>'+m.ideas.map(x=>`<div class="row" style="grid-template-columns:1fr"><span class="nm">${e(x)}</span></div>`).join(""):""}</div>`};
+const GROUPS=[["team","Team"],["training","In training"],["prospective","Prospective"]];
+const sorted=[...D_TEAM].sort((a,b)=>String(a.name).localeCompare(String(b.name)));
+$("team").innerHTML=D_TEAM.length?GROUPS.map(([k,label])=>{
+  const list=sorted.filter(m=>(m.group||"team")===k);
+  return `<h2>${label}</h2>`+(list.length?`<div class="grid">${list.map(card).join("")}</div>`:'<div class="empty">No one here yet.</div>');
+}).join(""):'<div class="empty">Team details and ideas will be added here.</div>';
   document.querySelectorAll("#team img.ph").forEach(img=>{
     let list=[];try{list=JSON.parse(img.dataset.q)}catch(_){list=[img.getAttribute("src")]}
     const exts=["jpg","jpeg","png","webp","JPG","JPEG","PNG"],queue=[];
