@@ -41,7 +41,7 @@ const VERSIONS = [
     folders: []
   },
   {
-    name: "Behind the Index", color: "purple", when: "Over the timeline", open: false,
+    name: "Behind the Index", color: "pink", when: "Over the timeline", open: false,
     topics: ["IP", "Budget", "Events and PR"],
     decks:   [["Spark Minda Foundation Presentation.pptx", "Pitched to Spark Minda", "", "Events and PR"]],
     pdfs:    [],
