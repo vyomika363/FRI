@@ -105,8 +105,8 @@ const COL = { purple: "--pu", pink: "--pk", teal: "--te", green: "--gr", gray: "
 const T = { p: "PPT", f: "PDF", x: "XLSX", s: "Sheet", d: "Doc", o: "Folder" };
 const TC = { p: "--pk", f: "--pu", x: "--gr", s: "--gr", d: "--te", o: "--mu" };
 const GR = { p: "Decks", f: "PDFs", x: "Data", s: "Data", d: "Docs", o: "Folders" };
-const f = (n, t, note, url) => ({ n, t, note, url });
-const mk = (arr, t) => (arr || []).map(a => f(a[0], t === "data" ? (/\.xlsx?$/i.test(a[0]) ? "x" : "s") : t, a[1] || "", a[2] || ""));
+const f = (n, t, note, url, topic) => ({ n, t, note, url, topic });
+const mk = (arr, t) => (arr || []).map(a => f(a[0], t === "data" ? (/\.xlsx?$/i.test(a[0]) ? "x" : "s") : t, a[1] || "", a[2] || "", a[3] || ""));
 const bad=[];
 const run=(label,fn)=>{try{fn()}catch(err){bad.push(label+": "+err.message);console.error(label,err)}};
 const pick=(get,file,fb)=>{try{const v=get();if(v===undefined)throw 0;return v}catch(_){bad.push(file+" has an error or is missing");return fb}};
@@ -149,8 +149,10 @@ $("partners").innerHTML=PARTNERS.map(p=>`<span class="chip" style="--c:var(${p[1
 
 run("FRI versions",()=>{
 $("vers").innerHTML=D_VERSIONS.map(v=>{
-  const g={};v.files.forEach(x=>(g[GR[x.t]]=g[GR[x.t]]||[]).push(x));
-  const body=["Decks","PDFs","Data","Docs","Folders"].filter(k=>g[k]).map(k=>`<div class="gl">${k.toUpperCase()}</div>${g[k].map(row).join("")}`).join("");
+  const hasTopic=v.files.some(x=>x.topic),g={};
+  v.files.forEach(x=>{const k=hasTopic?(x.topic||"Other"):GR[x.t];(g[k]=g[k]||[]).push(x)});
+  const pref=v.topics||[],order=hasTopic?[...pref.filter(k=>g[k]),...Object.keys(g).filter(k=>!pref.includes(k))]:["Decks","PDFs","Data","Docs","Folders"];
+  const body=order.filter(k=>g[k]).map(k=>`<div class="gl">${k.toUpperCase()}</div>${g[k].map(row).join("")}`).join("");
   return `<details class="vc" style="--c:var(${v.c})" ${v.open?"open":""}><summary><span class="vn">${e(v.name)}</span><span class="mu">${e(v.when)}</span></summary><div class="vb">${body}</div></details>`;
 }).join("");
 });
@@ -163,7 +165,7 @@ const today=new Date();today.setHours(0,0,0,0);
 const late=t=>t.due&&!t.done&&new Date(t.due+"T00:00:00")<today;
 const fmt=d=>d.split("-").reverse().join("-");
 const trow=t=>`<div class="task" tabindex="0"><input type="checkbox" data-id="${t.id}" ${t.done?"checked":""} aria-label="Mark done"><span class="nm${t.done?" dn":""}">${e(t.t)}</span>${t.due?`<span class="mu">${fmt(t.due)}</span>`:"<span></span>"}${late(t)?'<span class="tag late">Overdue</span>':"<span></span>"}<div class="tip">${t.owner?`<b>${e(t.owner)}</b> :people responsible`:"Nobody assigned yet"}</div></div>`;
-const form=()=>`<div class="add"><input class="in-t" placeholder="New task" aria-label="Task name"><input class="in-o" placeholder="Who’s doing it" aria-label="Owner"><input class="in-d" type="text" inputmode="numeric" placeholder="dd-mm-yyyy" maxlength="10" aria-label="Due date (dd-mm-yyyy)"><button class="btn fill go" type="button">Add task</button><div class="err"></div></div>`;
+const form=()=>`<div class="add"><input class="in-t" placeholder="Task" aria-label="Task name"><input class="in-o" placeholder="Who’s doing it" aria-label="Owner"><input class="in-d" type="text" inputmode="numeric" placeholder="dd-mm-yyyy" maxlength="10" aria-label="Due date (dd-mm-yyyy)"><button class="btn fill go" type="button">Add task</button><div class="err"></div></div>`;
 
 function render(){
   const pend=tasks.filter(t=>!t.done).sort((a,b)=>(a.due||"9").localeCompare(b.due||"9"));
@@ -172,7 +174,7 @@ function render(){
   $("glance").innerHTML=
    `<div class="card" style="--c:var(--pu)"><div class="mu">Current paper version</div><div class="big">${e(D_CURRENT.paperLabel)}</div><div class="nm">${e(CUR_PAPER.n)}</div><div style="margin-top:10px">${act(CUR_PAPER)}</div></div>`+
    `<div class="card" style="--c:var(--pk)"><div class="mu">Current PDF</div><div class="big">PDF</div><div class="nm">${e(CUR_PDF.n)}</div><div style="margin-top:10px">${act(CUR_PDF)}</div></div>`+
-   `<div class="card" style="--c:var(--gr);grid-column:1/-1"><div class="mu">Next task</div>${next?trow(next):'<div class="mu" style="padding:8px 0">No pending tasks.</div>'}${pend.length>1?`<div class="mu">+${pend.length-1} more in Pending tasks below</div>`:""}</div>`;
+   `<div class="card" style="--c:var(--gr);grid-column:1/-1"><div class="mu">Upcoming task</div>${next?trow(next):'<div class="mu" style="padding:8px 0">No pending tasks.</div>'}${pend.length>1?`<div class="mu">+${pend.length-1} more in Pending tasks below</div>`:""}</div>`;
   $("tl").innerHTML=(pend.length?pend.map(trow).join(""):'<div class="mu" style="padding:8px 0">Nothing pending.</div>')+form()+'<div class="mu" style="margin-top:8px">Tasks are saved in this browser only.</div>';
   $("dl").innerHTML=done.length?done.map(trow).join(""):'<div class="mu">Nothing done yet.</div>';
 }
