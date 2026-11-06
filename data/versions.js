@@ -33,7 +33,7 @@ const VERSIONS = [
     folders: []   // later: ["FRI 1.5 Resources", "Drive folder", "LINK"]
   },
   {
-    name: "v1.6 TRL 4(Lab Validation) - 10 states", color: "green", when: "August to December 2026", open: true,
+    name: "v1.6 TRL 4(Lab Validation) - 10 states", color: "green", when: "August to December 2026", open: false,
     decks:   [["FRI_1.6.pptx", "Current deck", "https://docs.google.com/presentation/d/1yN2F47pROPfeekmECZ_TPEBEnCCoWnpD/edit?usp=sharing&ouid=103599458927524996548&rtpof=true&sd=true"]],
     pdfs:    [],
     data:    [["FRI 1.6 data", "", "https://docs.google.com/spreadsheets/d/1uTMilboQWIoLIx2XIDWJdA6BAW7J_TmjIpzAovODXSQ/edit?usp=sharing"]],
