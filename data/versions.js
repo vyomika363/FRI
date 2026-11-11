@@ -43,13 +43,13 @@ const VERSIONS = [
   {
     name: "Behind the Index", color: "pink", when: "Over the timeline", open: false,
     topics: ["IP", "Budget", "Events and PR"],
-    decks:   [["Spark Minda Foundation Presentation.pptx", "Pitched to Spark Minda", "", "Events and PR"]],
+    decks:   [["Spark Minda Foundation Presentation.pptx", "Pitched to Spark Minda", "https://docs.google.com/presentation/d/15hFoDIQ--6Tm_uKkA4vpGyamMmOHR9tj/edit?usp=sharing&ouid=103599458927524996548&rtpof=true&sd=true", "Events and PR"]],
     pdfs:    [],
     data:    [["Summer Budget FRI-2026", "Budget", "", "Budget"],
               ["Total budget", "Budget", "", "Budget"]],
     docs:    [["FinTech Readiness Index IP Details", "IP", "", "IP"],
               ["FRI IP Owners& Authors", "IP", "", "IP"]],
-    folders: []
+    folders: [["Spark Minda Foundation Pictures", "Event Highlights", "https://drive.google.com/drive/folders/1LMvbSmoHzX4zbzBzsiYTY0HPeIb4mc8o?usp=sharing", "Events and PR"]]
   },
   {
     name: "Documents archive", color: "gray", when: "Over the timeline", open: false,
